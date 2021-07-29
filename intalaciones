@@ -1,0 +1,11 @@
+iconos
+    npm install --save react-native-vector-icons
+    npm install --save @types/react-native-vector-icons
+
+    npm install @react-navigation/native
+    npm install react-native-reanimated react-native-gesture-handler react-native-screens react-native-safe-area-context @react-native-community/masked-view
+
+para tab navigation -> https://reactnavigation.org/docs/tab-based-navigation
+    npm install @react-navigation/bottom-tabs
+para stack navigation
+    npm install @react-navigation/stack
