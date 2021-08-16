@@ -1,24 +1,24 @@
 import React, {Component} from "react";
-import {getFocusedRouteNameFromRoute, NavigationContainer} from "@react-navigation/native";
+import {NavigationContainer} from "@react-navigation/native";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
-import Clients from "./src/screens/clients";
+import Clients from "./src/screens/users/Clients";
 import Reports from "./src/screens/reports";
 import Order from "./src/screens/order";
 import Icons from "react-native-vector-icons/AntDesign";
 import Mycolors from "./src/colors/mycolors";
 const Tab = createBottomTabNavigator();
 class App extends Component {
+  
   render() {
     return (
-      <NavigationContainer>
-
+      <NavigationContainer independent={true}>
 
         <Tab.Navigator
           screenOptions={({route}) => ({
             tabBarIcon: ({focused, color, size}) => {
               let iconName;
               switch (route.name) {
-                case 'Clientes': {
+                case 'Usuarios': {
                   if (focused) {
                     return (
                       <Icons name="team" size={23} color={Mycolors.secondary} />
@@ -56,7 +56,7 @@ class App extends Component {
             },
           })}
         >
-          <Tab.Screen name="Clientes" component={Clients} />
+          <Tab.Screen name="Usuarios" component={Clients} />
           <Tab.Screen name="Pedidos" component={Order} />
           <Tab.Screen name="Reportes" component={Reports} />
         </Tab.Navigator>

@@ -9,3 +9,9 @@ para tab navigation -> https://reactnavigation.org/docs/tab-based-navigation
     npm install @react-navigation/bottom-tabs
 para stack navigation
     npm install @react-navigation/stack
+para install react paper
+    npm install react-native-paper
+para install axios
+    npm install axios
+para la camara 
+    npm i react-native-camera
