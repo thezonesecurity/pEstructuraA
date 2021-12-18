@@ -4,6 +4,8 @@ import {TextInput, Button, Avatar} from "react-native-paper";
 import axios, { AxiosResponse } from "axios";
 import TakePicture from "./TakePicture";
 import {StackNavigationProp} from "@react-navigation/stack";
+import AppContext from "../../context/AppContext";
+
 interface ItemUsers {
   username?: string,
   email?: string,
@@ -14,33 +16,82 @@ interface MyState {
  username: string,
  email: string,
  password: string,
- repassword: string
+ repassword: string,
+ pathImg?: string,
+ isload: boolean,
 }
 interface MyProps {
   navigation: StackNavigationProp<any, any>
 }
 class RegisterUsers extends Component<MyProps, MyState> {
+  static contextType = AppContext;
   constructor(props: any) {
     super(props);
     this.state = {
         username: "",
         email: "",
         password: "",
-        repassword: ""
+        repassword: "",
+        isload: false
     }
   }
   async CheckAndSetData() {
+    var navigation: StackNavigationProp<any, any>;
     console.log(this.state);
     if (this.state.password != this.state.repassword) {
       return;
     }
-    var result: any = await axios.post<ItemUsers, AxiosResponse<any> >("http://192.168.1.106:8000/api/users", this.state);
-    console.log(result);
-    this.props.navigation.push("list"); //en "list" es igual ./CLients-> al name del stack.creen
+    var result: any = await axios.post<ItemUsers, AxiosResponse<any> >("http://192.168.1.106:8000/api/users", this.state).then((response) => {
+      return response.data;
+    });
+    console.log(result.data);
+    if (this.state.isload) {
+      var data = new FormData();
+      data.append("avatar", {name: "avatar.jpg", uri: this.state.pathImg, type: "image/jpg"});
+      console.log("http://192.168.1.106/api/uploadportrait/" + result.serverResponse._id);
+      fetch("http://192.168.1.106/api/uploadportrait/" + result.serverResponse._id, {
+        method: "POST",
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+        body: data,
+      }).then((result) => {
+        result.json();
+      }).then((result) => {
+        console.log(result);
+        navigation.push("list"); //en "list" es igual ./CLients-> al name del stack.creen
+      });
+      /*
+      var result_img= await axios.post("http://192.168.1.106/api/uploadportrait/" + result.serverResponse._id, {
+        body: data,
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      }).then((response => {
+        return response.data;
+      }));
+      console.log(result_img);
+      this.props.navigation.push("list"); //en "list" es igual ./CLients-> al name del stack.creen
+      */
+    }
+    
   }
   onTakePicture(path: string) {
     console.log("funcion register user camera")
-    console.log(path);
+    //console.log(path);
+    this.setState({
+      pathImg: path,
+      isload: true
+    });
+  }
+  showAvatar(){
+    //console.log("this.context");
+    console.log(this.context);
+    if (this.context.uriphoto != "") { //this.state.isload
+      return <Avatar.Image size={110} source={{uri: this.context.uriphoto}} /> //this.state.pathImg
+    } else {
+      return <Avatar.Image size={110} source={require('../../../assets/img/avatardefault.png')} />
+    }
   }
   render() {
     return (
@@ -83,7 +134,7 @@ class RegisterUsers extends Component<MyProps, MyState> {
                 Foto
             </Button>
             <View style={styles.imagestyle} >
-              <Avatar.Image size={110} source={require('../../../assets/img/avatardefault.png')} />
+              {this.showAvatar()}
             </View>
           </View>
 

@@ -7,22 +7,28 @@ import DetailUsers from "./DetailUsers";
 import RegisterUsers from "./RegisterUsers";
 import {Appbar} from "react-native-paper";
 import TakePicture from "./TakePicture"
+import AppContext from "../../context/AppContext";
 
 var Stack = createStackNavigator();
 const MORE_ICON = Platform.OS === 'ios' ? 'dots-horizontal' : 'dots-vertical';
 class Clients extends Component<any, any> {
+  
+  static contextType = AppContext;
   constructor(props: any) {
     super(props);
   }
   
   render() {
+    const {searchbarVisible, changeSearchBarVisible} = this.context;
     return (
       <NavigationContainer independent={true}>
         <Stack.Navigator>
           <Stack.Screen name="list" component={ListUsers} options={() => ({// para listar usuarios
             header: () => <Appbar.Header > 
             <Appbar.Content title="Gestor de usuarios" subtitle={'clientes / roles'} />
-            <Appbar.Action icon="magnify" onPress={() => {}} />
+            <Appbar.Action icon="magnify" onPress={() => {
+              changeSearchBarVisible(!searchbarVisible);
+            }} />
             <Appbar.Action icon={MORE_ICON} onPress={() => {}} />
           </Appbar.Header>
           }

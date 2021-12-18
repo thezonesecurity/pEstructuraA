@@ -14,4 +14,17 @@ para install react paper
 para install axios
     npm install axios
 para la camara 
-    npm i react-native-camera
+    npm install react-native-camera@3.42.0 //config en android->app->build.grade => @ es para descargar una vercion especifica
+
+
+
+Les paso un ejemplo de una función de como podrian generar un password aleatorio:
+helpers.randomNumber = () =>{
+    const possible = 'abcdefghijklmnopqrstuvwxyz0123456789'
+    let randomnumber = ""
+    for(let i=0; i < 6; i++){
+        randomnumber += possible.charAt(Math.floor(Math.random() * possible.length)) 
+    }
+    return randomnumber
+}
+La variable randoNumber es la contraseña generada

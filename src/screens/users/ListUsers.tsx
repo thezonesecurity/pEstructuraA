@@ -1,8 +1,9 @@
 import React, {Component} from "react";
 import {Text, View, StyleSheet} from "react-native"
 import axios from "axios";
-import {List, Avatar, FAB} from "react-native-paper";
+import {List, Avatar, FAB, Searchbar} from "react-native-paper";
 import { FlatList } from "react-native-gesture-handler";
+import AppContext from "../../context/AppContext";
 
 interface ItemUsers {
   _id: string,
@@ -22,9 +23,9 @@ interface MyState {
 interface ItemData {
   item: ItemUsers
 }
-//29:00
 
 class ListUsers extends Component<any, MyState> {
+  static contextType = AppContext;
   constructor(props: any) {
     super(props);
     this.state = {
@@ -32,7 +33,7 @@ class ListUsers extends Component<any, MyState> {
     }
   }
   async componentDidMount() {
-    console.log("aki");
+    console.log(this.context);
     var url = "https://192.168.1.106:8000/api/users";
     var result: Array<ItemUsers> = await axios.get<ServerResponse>(url).then((item) => {
       return item.data.serverResponse
@@ -60,12 +61,24 @@ class ListUsers extends Component<any, MyState> {
     }
   }
   render() {
+    var {searchbarVisible} = this.context;
     return (
       <View style={styles.container}>
+          <View>
+            {
+              searchbarVisible && //1:20:00 video 8 para hacer apacer y desaparecer el search
+              <Searchbar
+              placeholder="Search"
+              onChangeText={() => {
+
+              }}
+              value= ""
+              />
+            }
+          </View>
           <Text>
               screen for clientes
           </Text>
-          
           <View>
             <FlatList //min 30-36 de video 5 
               data={this.state.dataUsers}
